@@ -26,6 +26,9 @@
     <deployable.classifier.eap7>eap7</deployable.classifier.eap7>
     <deployable.classifier.swarm>swarm</deployable.classifier.swarm>
     <deployable.context>kie-wb</deployable.context>
+    <wars.dir>${project.build.directory}/wars</wars.dir>
+    <!--TODO update name-->
+    <deployable.file>${wars.dir}/new-kie-wb-hacked.war</deployable.file>
 
     <deployable.groupId>org.kie</deployable.groupId>
     <deployable.artifactId>kie-wb</deployable.artifactId>
@@ -200,7 +203,8 @@
               <id>start-container</id>
               <phase>pre-integration-test</phase>
               <goals>
-                <goal>start</goal>
+                <!-- Set to start to run the test and finished -->
+                <goal>run</goal>
               </goals>
             </execution>
             <execution>
@@ -256,6 +260,11 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
       </plugin>
+            <plugin>
+        <groupId>com.googlecode.maven-download-plugin</groupId>
+        <artifactId>download-maven-plugin</artifactId>
+        <version>1.4.0</version>
+      </plugin>
     </plugins>
   </build>
 
@@ -285,6 +294,60 @@
         <deployable.artifactId>kie-wb-monitoring</deployable.artifactId>
         <deployable.context>kie-wb</deployable.context>
       </properties>
+    </profile>
+    
+    <profile>
+      <id>kie-wb-local</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.codehaus.cargo</groupId>
+              <artifactId>cargo-maven2-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>start-container</id>
+                  <configuration>
+                    <deployables>
+                      <deployable>
+                        <type>war</type>
+                        <properties>
+                          <context>${deployable.context}</context>
+                        </properties>
+                        <pingURL>${kie.wb.url}</pingURL>
+                        <pingTimeout>${deployment.timeout}</pingTimeout>
+                        <location>${deployable.file}</location>
+                      </deployable>
+                    </deployables>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+        <plugins>
+          <plugin>
+              <groupId>com.googlecode.maven-download-plugin</groupId>
+              <artifactId>download-maven-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>download-kie-server</id>
+                  <phase>pre-integration-test</phase>
+                  <goals>
+                    <goal>wget</goal>
+                  </goals>
+                  <configuration>
+                    <!-- TODO update location -->
+                    <url>file:///home/jschwan/ns/kie-wb-rest-hack/new-kie-wb-hacked.war</url>
+                    <outputDirectory>${wars.dir}</outputDirectory><!-- maybe is neede to change dir -->
+                    <unpack>false</unpack>
+                    <overwrite>true</overwrite>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+        </plugins>
+      </build>
     </profile>
 
     <profile>
@@ -382,7 +445,7 @@
              and for free (e.g. from http://www.jboss.org/products/eap/download/) and the zip location needs to be specified
              here or via system property when running the build (don't forget to use the `file://` prefix when
              referencing the zip from local filesystem). -->
-        <eap7.download.url>valid-url-for-eap-7-zip-needs-to-be-specified-here-or-via-cmd-line</eap7.download.url>
+        <eap7.download.url>file:///home/jschwan/Eap/jboss-eap-7.1.0/jboss-eap-7.1.0.zip</eap7.download.url>
       </properties>
       <build>
         <pluginManagement>
