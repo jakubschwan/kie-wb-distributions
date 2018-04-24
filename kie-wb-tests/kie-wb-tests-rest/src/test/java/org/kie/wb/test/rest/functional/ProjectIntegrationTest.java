@@ -38,6 +38,8 @@ import org.kie.wb.test.rest.client.NotSuccessException;
 import qa.tools.ikeeper.annotation.Jira;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.experimental.categories.Category;
+import org.kie.wb.test.rest.category.Smoke;
 
 public class ProjectIntegrationTest extends RestTestBase {
 
@@ -72,6 +74,7 @@ public class ProjectIntegrationTest extends RestTestBase {
     }
 
     @Test
+    @Category(Smoke.class)
     public void testCreateProjectMinimal() {
         createProject("minimalProject", null, GROUP_ID, VERSION);
     }

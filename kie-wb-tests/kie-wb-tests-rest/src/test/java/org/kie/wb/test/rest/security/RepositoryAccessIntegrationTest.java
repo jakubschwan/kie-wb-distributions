@@ -19,10 +19,12 @@ package org.kie.wb.test.rest.security;
 import org.guvnor.rest.client.CloneProjectRequest;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.kie.wb.test.rest.AccessRestTestBase;
 import org.kie.wb.test.rest.User;
+import org.kie.wb.test.rest.category.Smoke;
 
 @RunWith(Parameterized.class)
 public class RepositoryAccessIntegrationTest extends AccessRestTestBase {
@@ -48,6 +50,7 @@ public class RepositoryAccessIntegrationTest extends AccessRestTestBase {
     }
 
     @Test
+    @Category(Smoke.class)
     public void testGetRepository() {
         final String name = "getRepositoryWith" + user.getUserName();
         createNewProject(SPACE_NAME, name, "org.myteam", "1.1.0");

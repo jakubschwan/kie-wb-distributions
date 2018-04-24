@@ -18,10 +18,12 @@ package org.kie.wb.test.rest.security;
 
 import org.guvnor.rest.client.Space;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.kie.wb.test.rest.AccessRestTestBase;
 import org.kie.wb.test.rest.User;
+import org.kie.wb.test.rest.category.Smoke;
 
 @RunWith(Parameterized.class)
 public class SpaceAccessIntegrationTest extends AccessRestTestBase {
@@ -48,6 +50,7 @@ public class SpaceAccessIntegrationTest extends AccessRestTestBase {
     }
 
     @Test
+    @Category(Smoke.class)
     public void testGetSpace() {
         String name = "getSpaceWith" + user.getUserName();
         createSpace(name);

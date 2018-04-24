@@ -23,7 +23,9 @@ import org.guvnor.rest.client.JobResult;
 import org.guvnor.rest.client.JobStatus;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.kie.wb.test.rest.RestTestBase;
+import org.kie.wb.test.rest.category.Smoke;
 import org.kie.wb.test.rest.client.RestWorkbenchClient;
 import org.kie.wb.test.rest.client.WorkbenchClient;
 
@@ -52,6 +54,7 @@ public class JobIntegrationTest extends RestTestBase {
     }
 
     @Test
+    @Category(Smoke.class)
     public void testGet() {
         JobRequest jobRequest = createSpace("getSpace");
 

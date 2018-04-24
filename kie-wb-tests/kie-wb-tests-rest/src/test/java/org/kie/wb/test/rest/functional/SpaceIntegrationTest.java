@@ -28,7 +28,9 @@ import org.guvnor.rest.client.ProjectResponse;
 import org.guvnor.rest.client.Space;
 import org.guvnor.rest.client.SpaceRequest;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.kie.wb.test.rest.RestTestBase;
+import org.kie.wb.test.rest.category.Smoke;
 import org.kie.wb.test.rest.client.NotSuccessException;
 import qa.tools.ikeeper.annotation.Jira;
 
@@ -69,6 +71,7 @@ public class SpaceIntegrationTest extends RestTestBase {
     }
 
     @Test
+    @Category(Smoke.class)
     public void testCreateMinimal() {
         final Space space = new Space();
         space.setName("minimalSpace");
@@ -129,6 +132,7 @@ public class SpaceIntegrationTest extends RestTestBase {
     }
 
     @Test
+    @Category(Smoke.class)
     public void testGetExisting() {
         final String name = "getExistingSpace";
         prepareSpace(name);
