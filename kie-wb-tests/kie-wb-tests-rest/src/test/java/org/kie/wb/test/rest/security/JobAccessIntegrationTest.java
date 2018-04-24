@@ -18,10 +18,12 @@ package org.kie.wb.test.rest.security;
 
 import org.guvnor.rest.client.JobRequest;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.kie.wb.test.rest.AccessRestTestBase;
 import org.kie.wb.test.rest.User;
+import org.kie.wb.test.rest.category.Smoke;
 
 @RunWith(Parameterized.class)
 public class JobAccessIntegrationTest extends AccessRestTestBase {
@@ -31,6 +33,7 @@ public class JobAccessIntegrationTest extends AccessRestTestBase {
     }
 
     @Test
+    @Category(Smoke.class)
     public void testGetJob() {
         JobRequest jobRequest = createSpace("getSpaceWith" + user.getUserName());
 

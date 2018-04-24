@@ -19,10 +19,12 @@ package org.kie.wb.test.rest.security;
 import org.guvnor.rest.client.CreateProjectRequest;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.kie.wb.test.rest.AccessRestTestBase;
 import org.kie.wb.test.rest.User;
+import org.kie.wb.test.rest.category.Smoke;
 
 @RunWith(Parameterized.class)
 public class ProjectAccessIntegrationTest extends AccessRestTestBase {
@@ -61,6 +63,7 @@ public class ProjectAccessIntegrationTest extends AccessRestTestBase {
     }
 
     @Test
+    @Category(Smoke.class)
     public void testGetProjects() {
         assertOperation(() -> roleClient.getProjects(SPACE_NAME));
     }

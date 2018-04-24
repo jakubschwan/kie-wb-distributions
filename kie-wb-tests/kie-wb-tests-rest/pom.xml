@@ -142,6 +142,22 @@
     <profile>
       <id>kie-drools-wb</id>
     </profile>
+    <profile>
+      <!-- Run just smoke tests to check basic functionality. -->
+      <id>smoke</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <artifactId>maven-failsafe-plugin</artifactId>
+              <configuration>
+                <groups>org.kie.wb.test.rest.category.Smoke</groups>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
   </profiles>
 
 </project>
