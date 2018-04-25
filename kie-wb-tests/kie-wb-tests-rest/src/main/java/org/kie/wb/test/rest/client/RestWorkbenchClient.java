@@ -183,6 +183,9 @@ public class RestWorkbenchClient implements WorkbenchClient {
                 .resolveTemplate("spaceName", spaceName)
                 .resolveTemplate("projectName", projectName)
                 .request().delete(DeleteProjectRequest.class);
+        if(request.getJobId().isEmpty()) {
+            throw new RuntimeException("JobId from request is empty or null. \nRequest: " + request.toString());
+        }
 
         return waitUntilJobFinished(request, projectJobTimeoutSeconds);
     }
@@ -251,6 +254,9 @@ public class RestWorkbenchClient implements WorkbenchClient {
         RemoveSpaceRequest request = target.path("spaces/{spaceName}")
                 .resolveTemplate("spaceName", name)
                 .request().delete(RemoveSpaceRequest.class);
+        if(request.getJobId().isEmpty()) {
+            throw new RuntimeException("JobId from request is empty or null. \nRequest: " + request.toString());
+        }
 
         return waitUntilJobFinished(request);
     }
@@ -268,6 +274,9 @@ public class RestWorkbenchClient implements WorkbenchClient {
         log.info("Compiling project '{}' from space '{}'", projectName, spaceName);
 
         CompileProjectRequest request = postMavenRequest(spaceName, projectName, "compile", CompileProjectRequest.class);
+        if(request.getJobId().isEmpty()) {
+            throw new RuntimeException("JobId from request is empty or null. \nRequest: " + request.toString());
+        }
 
         return waitUntilJobFinished(request, projectJobTimeoutSeconds);
     }
@@ -277,7 +286,10 @@ public class RestWorkbenchClient implements WorkbenchClient {
         log.info("Installing project '{}' from space '{}'", projectName, spaceName);
 
         InstallProjectRequest request = postMavenRequest(spaceName, projectName, "install", InstallProjectRequest.class);
-
+        if(request.getJobId().isEmpty()) {
+            throw new RuntimeException("JobId from request is empty or null. \nRequest: " + request.toString());
+        }
+        
         return waitUntilJobFinished(request, projectJobTimeoutSeconds);
     }
 
@@ -295,6 +307,9 @@ public class RestWorkbenchClient implements WorkbenchClient {
         log.info("Deploying project '{}' from space '{}'", projectName, spaceName);
 
         DeployProjectRequest request = postMavenRequest(spaceName, projectName, "deploy", DeployProjectRequest.class);
+        if(request.getJobId().isEmpty()) {
+            throw new RuntimeException("JobId from request is empty or null. \nRequest: " + request.toString());
+        }
 
         return waitUntilJobFinished(request, projectJobTimeoutSeconds);
     }
@@ -321,7 +336,18 @@ public class RestWorkbenchClient implements WorkbenchClient {
                     log.info("  It took {} seconds to complete the job", totalSecondsWaited);
                     return request;
                 default:
-                    log.warn("  Timeout waiting {} seconds for job to succeed", totalSecondsWaited);
+                    log.error("  Unexpected job result after waiting {} seconds for job to succeed", totalSecondsWaited);
+                    System.out.println("" + jobResult.getResult());
+                    System.out.println(jobResult.getStatus());
+                    System.out.println("    ");
+                    System.out.println(request.getStatus());
+                    System.out.println(request.getJobId());
+                    for (int i = 0; i < 5; i++) {
+                        JobResult jb = getJob(request.getJobId());
+
+                        System.out.println(i + " " + jb.getStatus());
+                        System.out.println(i + " " + jb.getResult());
+                    }
                     throw new NotSuccessException(jobResult);
             }
         }
